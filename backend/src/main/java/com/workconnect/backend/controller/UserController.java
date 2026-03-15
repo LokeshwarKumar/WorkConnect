@@ -1,15 +1,15 @@
 package com.workconnect.backend.controller;
 
+import com.workconnect.backend.dto.request.UserProfileUpdateRequest;
 import com.workconnect.backend.dto.response.UserProfileResponse;
 import com.workconnect.backend.security.services.UserDetailsImpl;
 import com.workconnect.backend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -28,8 +28,8 @@ public class UserController {
     @PutMapping("/profile")
     @PreAuthorize("hasRole('USER') or hasRole('WORKER')")
     public ResponseEntity<?> updateProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                           @RequestBody Map<String, String> updateRequest) {
-        userService.updateProfile(userDetails.getId(), updateRequest.get("contactDetails"), updateRequest.get("address"));
+                                           @Valid @RequestBody UserProfileUpdateRequest updateRequest) {
+        userService.updateProfile(userDetails.getId(), updateRequest);
         return ResponseEntity.ok("Profile updated successfully");
     }
 }

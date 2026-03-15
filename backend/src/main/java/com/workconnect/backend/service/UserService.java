@@ -1,5 +1,6 @@
 package com.workconnect.backend.service;
 
+import com.workconnect.backend.dto.request.UserProfileUpdateRequest;
 import com.workconnect.backend.dto.response.UserProfileResponse;
 import com.workconnect.backend.entity.User;
 import com.workconnect.backend.exception.ResourceNotFoundException;
@@ -27,12 +28,21 @@ public class UserService {
                 .build();
     }
 
-    public void updateProfile(Long userId, String contactDetails, String address) {
+    public void updateProfile(Long userId, UserProfileUpdateRequest updateRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
-        user.setContactDetails(contactDetails);
-        user.setAddress(address);
+        // Update only non-null fields
+        if (updateRequest.getName() != null && !updateRequest.getName().trim().isEmpty()) {
+            user.setName(updateRequest.getName().trim());
+        }
+        
+        // Allow empty strings for optional fields but trim them
+        user.setContactDetails(updateRequest.getContactDetails() != null ? 
+            updateRequest.getContactDetails().trim() : null);
+        user.setAddress(updateRequest.getAddress() != null ? 
+            updateRequest.getAddress().trim() : null);
+        
         userRepository.save(user);
     }
 }

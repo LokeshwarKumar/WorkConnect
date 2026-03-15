@@ -13,7 +13,8 @@ const ProfilePage = () => {
     address: '',
     serviceType: '',
     location: '',
-    charges: 0
+    minimumCharge: 0,
+    hourlyCharge: 0
   });
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -39,24 +40,58 @@ const ProfilePage = () => {
     e.preventDefault();
     setIsSaving(true);
     try {
+      // Validate user profile data
+      const userProfileData = {
+        name: profile.name?.trim(),
+        contactDetails: profile.contactDetails?.trim() || '',
+        address: profile.address?.trim() || ''
+      };
+
+      if (!userProfileData.name) {
+        throw new Error('Name is required');
+      }
+
       if (user.role === 'ROLE_USER' || user.role === 'ROLE_WORKER') {
-        await api.put('/users/profile', {
-          contactDetails: profile.contactDetails,
-          address: profile.address
-        });
+        await api.put('/users/profile', userProfileData);
       }
       
       if (user.role === 'ROLE_WORKER') {
-        await api.post('/workers/profile', {
-          serviceType: profile.serviceType,
-          location: profile.location,
-          charges: profile.charges
-        });
+        const workerProfileData = {
+          serviceType: profile.serviceType?.trim(),
+          location: profile.location?.trim(),
+          minimumCharge: Number(profile.minimumCharge) || 0,
+          hourlyCharge: Number(profile.hourlyCharge) || 0
+        };
+
+        // Validate worker-specific fields
+        if (!workerProfileData.serviceType || !workerProfileData.location) {
+          throw new Error('Service type and location are required for workers');
+        }
+
+        await api.post('/workers/profile', workerProfileData);
       }
       
       alert('Profile updated successfully');
     } catch (error) {
-      alert('Failed to update profile');
+      console.error('Update profile error:', error.response?.data || error);
+      
+      let errorMessage = 'Failed to update profile';
+      
+      if (error.response?.data) {
+        // Handle validation errors from backend
+        if (typeof error.response.data === 'string') {
+          errorMessage = error.response.data;
+        } else if (error.response.data.message) {
+          errorMessage = error.response.data.message;
+        } else if (error.response.data.errors) {
+          // Handle field-specific validation errors
+          errorMessage = error.response.data.errors.map(err => err.defaultMessage || err.message).join(', ');
+        }
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      alert(errorMessage);
     } finally {
       setIsSaving(false);
     }
@@ -77,6 +112,16 @@ const ProfilePage = () => {
       <div className="profile-content card">
         <form onSubmit={handleUpdate} className="profile-form">
           <div className="form-grid">
+            <div className="input-group">
+              <label><User size={16} /> Full Name</label>
+              <input 
+                type="text" 
+                value={profile.name || ''} 
+                onChange={(e) => setProfile({...profile, name: e.target.value})}
+                placeholder="Your Name"
+                required
+              />
+            </div>
             <div className="input-group">
               <label><Mail size={16} /> Email Address</label>
               <input type="email" value={profile.email} disabled />
@@ -111,14 +156,23 @@ const ProfilePage = () => {
                     value={profile.serviceType || ''} 
                     onChange={(e) => setProfile({...profile, serviceType: e.target.value})}
                     placeholder="e.g. Master Plumber"
+                    required
                   />
                 </div>
                 <div className="input-group">
-                  <label><DollarSign size={16} /> Hourly Charges</label>
+                  <label><DollarSign size={16} /> Minimum Charge</label>
                   <input 
                     type="number" 
-                    value={profile.charges || 0} 
-                    onChange={(e) => setProfile({...profile, charges: e.target.value})}
+                    value={profile.minimumCharge || 0} 
+                    onChange={(e) => setProfile({...profile, minimumCharge: Number(e.target.value)})}
+                  />
+                </div>
+                <div className="input-group">
+                  <label><DollarSign size={16} /> Hourly Charge</label>
+                  <input 
+                    type="number" 
+                    value={profile.hourlyCharge || 0} 
+                    onChange={(e) => setProfile({...profile, hourlyCharge: Number(e.target.value)})}
                   />
                 </div>
                 <div className="input-group span-full">
@@ -128,6 +182,7 @@ const ProfilePage = () => {
                     value={profile.location || ''} 
                     onChange={(e) => setProfile({...profile, location: e.target.value})}
                     placeholder="City, Region"
+                    required
                   />
                 </div>
               </>
