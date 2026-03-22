@@ -12,7 +12,12 @@ export const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem('user');
     
     if (token && storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+      }
     }
     setLoading(false);
   }, []);
@@ -55,8 +60,18 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  /** Merge into session user and persist (e.g. after profile update). */
+  const updateUser = (updates) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, ...updates };
+      localStorage.setItem('user', JSON.stringify(next));
+      return next;
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, updateUser, loading }}>
       {children}
     </AuthContext.Provider>
   );

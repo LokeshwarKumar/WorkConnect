@@ -23,15 +23,20 @@ public class ServiceRequest {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "worker_id", nullable = false)
-    private User worker;
+    private Worker worker;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ServiceRequestStatus status;
 
+    @Column(nullable = false)
     private LocalDateTime requestDate;
 
     private String description;
 
     private String location;
+
+    // Bidirectional relationship with Review
+    @OneToOne(mappedBy = "serviceRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Review review;
 }

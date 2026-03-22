@@ -1,6 +1,7 @@
 package com.workconnect.backend.controller;
 
 import com.workconnect.backend.dto.request.ReviewForm;
+import com.workconnect.backend.dto.response.ReviewResponse;
 import com.workconnect.backend.security.services.UserDetailsImpl;
 import com.workconnect.backend.service.ReviewService;
 import jakarta.validation.Valid;
@@ -10,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/reviews")
@@ -17,6 +20,12 @@ public class ReviewController {
 
     @Autowired
     private ReviewService reviewService;
+
+    @GetMapping("/worker/{workerId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<ReviewResponse>> listForWorker(@PathVariable Long workerId) {
+        return ResponseEntity.ok(reviewService.listReviewsForWorker(workerId));
+    }
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")

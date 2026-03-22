@@ -1,11 +1,12 @@
 package com.workconnect.backend.entity;
 
+import java.util.List;
 import com.workconnect.backend.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user_profiles")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,11 +26,21 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    private String contactDetails; // Mobile number
 
-    private String contactDetails;
+    @Column(nullable = false)
+    private String address; // Address
 
-    private String address;
+    @Enumerated(EnumType.STRING)
+    @Column
+    @Builder.Default
+    private Role role = Role.USER;
+
+    // Relationships
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ServiceRequest> serviceRequestsAsUser;
+
+    @OneToMany(mappedBy = "reviewer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Review> reviewsGiven;
 }

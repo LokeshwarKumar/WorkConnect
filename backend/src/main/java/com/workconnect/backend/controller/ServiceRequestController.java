@@ -1,7 +1,7 @@
 package com.workconnect.backend.controller;
 
 import com.workconnect.backend.dto.request.ServiceRequestForm;
-import com.workconnect.backend.entity.ServiceRequest;
+import com.workconnect.backend.dto.response.ServiceRequestResponse;
 import com.workconnect.backend.enums.ServiceRequestStatus;
 import com.workconnect.backend.security.services.UserDetailsImpl;
 import com.workconnect.backend.service.ServiceRequestService;
@@ -27,18 +27,18 @@ public class ServiceRequestController {
     public ResponseEntity<?> createRequest(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                            @Valid @RequestBody ServiceRequestForm form) {
         serviceRequestService.createServiceRequest(userDetails.getId(), form);
-        return ResponseEntity.ok("Service reuqest created successfully");
+        return ResponseEntity.ok("Service request created successfully");
     }
 
     @GetMapping("/user")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<ServiceRequest>> getUserRequests(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<List<ServiceRequestResponse>> getUserRequests(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok(serviceRequestService.getUserRequests(userDetails.getId()));
     }
 
     @GetMapping("/worker")
     @PreAuthorize("hasRole('WORKER')")
-    public ResponseEntity<List<ServiceRequest>> getWorkerRequests(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<List<ServiceRequestResponse>> getWorkerRequests(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok(serviceRequestService.getWorkerRequests(userDetails.getId()));
     }
 

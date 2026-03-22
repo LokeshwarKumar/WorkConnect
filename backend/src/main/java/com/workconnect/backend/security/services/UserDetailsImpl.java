@@ -1,6 +1,8 @@
 package com.workconnect.backend.security.services;
 
 import com.workconnect.backend.entity.User;
+import com.workconnect.backend.entity.Worker;
+import com.workconnect.backend.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,13 +36,26 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user) {
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        Role r = user.getRole() != null ? user.getRole() : Role.USER;
+        String authority = r == Role.ADMIN ? "ROLE_ADMIN" : "ROLE_USER";
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(authority));
 
         return new UserDetailsImpl(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),
+                authorities);
+    }
+
+    public static UserDetailsImpl build(Worker worker) {
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_WORKER"));
+
+        return new UserDetailsImpl(
+                worker.getId(),
+                worker.getName(),
+                worker.getEmail(),
+                worker.getPassword(),
                 authorities);
     }
 

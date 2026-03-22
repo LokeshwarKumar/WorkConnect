@@ -128,6 +128,11 @@
   gap: 2rem;
 }
 
+.quick-action-link {
+  text-decoration: none;
+  color: inherit;
+}
+
 .action-card {
   display: flex;
   flex-direction: column;
@@ -243,6 +248,11 @@
   color: var(--text-secondary);
   font-size: 0.9rem;
   margin-top: 0.2rem;
+}
+
+.muted {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
 }
 
 .small {

@@ -5,7 +5,9 @@ import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import com.workconnect.backend.security.services.UserDetailsImpl;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -26,17 +28,22 @@ public class JwtUtils {
     }
 
     public String generateJwtToken(Authentication authentication) {
-        String username = authentication.getName();
+        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+        boolean isWorker = principal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch("ROLE_WORKER"::equals);
+        String subject = (isWorker ? "W" : "U") + principal.getId();
 
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String getUserNameFromJwtToken(String token) {
+    /** JWT subject: {@code U}{userId} for accounts in {@code user_profiles}, {@code W}{workerId} for workers. */
+    public String getSubjectFromJwtToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key()).build()
                 .parseClaimsJws(token).getBody().getSubject();
     }

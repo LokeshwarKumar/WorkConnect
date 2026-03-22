@@ -1,5 +1,6 @@
 package com.workconnect.backend.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,6 +30,15 @@ public class GlobalExceptionHandler {
         errorDetails.put("message", ex.getMessage());
         errorDetails.put("status", HttpStatus.UNAUTHORIZED.value());
         return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleDataIntegrity(DataIntegrityViolationException ex) {
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("timestamp", LocalDateTime.now());
+        errorDetails.put("message", "Operation blocked: related records still exist (e.g. bookings or reviews).");
+        errorDetails.put("status", HttpStatus.CONFLICT.value());
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(InvalidRequestException.class)

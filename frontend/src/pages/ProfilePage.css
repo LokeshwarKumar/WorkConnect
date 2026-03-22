@@ -30,6 +30,141 @@
   margin-bottom: 0.5rem;
 }
 
+/* Status Messages */
+.status-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.status-message.success {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid #22c55e;
+}
+
+.status-message.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+.status-message.warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid #f59e0b;
+}
+
+/* Profile Actions */
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.edit-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-gold-bright);
+  color: var(--color-black);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn:hover {
+  background: var(--color-gold-metallic);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold-hover);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.cancel-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-dark-gray);
+  color: var(--color-white);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn:hover:not(:disabled) {
+  background: #666;
+}
+
+.save-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-gold-bright);
+  color: var(--color-black);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.save-btn:hover:not(:disabled) {
+  background: var(--color-gold-metallic);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold-hover);
+}
+
+.save-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Section Headers */
+.section-header {
+  grid-column: span 2;
+  margin-bottom: 1rem;
+}
+
+.section-header h3 {
+  color: var(--color-gold-bright);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-gold-bright);
+}
+
+/* Display Values */
+.display-value {
+  background: var(--bg-primary);
+  border: 1px solid var(--color-dark-gray);
+  padding: 0.8rem 1rem;
+  border-radius: 4px;
+  color: var(--color-white);
+  font-size: 1rem;
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
 .profile-form {
   padding: 1rem;
 }
@@ -106,4 +241,73 @@
   align-items: center;
   gap: 0.8rem;
   padding: 1rem 3rem;
+}
+
+/* Error State */
+.error-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  border: 2px solid rgba(239, 68, 68, 0.2);
+  margin: 2rem 0;
+}
+
+.error-state h2 {
+  color: #ef4444;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.error-state p {
+  color: var(--color-white);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.error-state button {
+  background: var(--color-gold-bright);
+  color: var(--color-black);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.error-state button:hover {
+  background: var(--color-gold-metallic);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-gold-hover);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .span-full, .section-header {
+    grid-column: span 1;
+  }
+  
+  .profile-actions {
+    justify-content: center;
+  }
+  
+  .edit-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .edit-actions button {
+    width: 100%;
+    justify-content: center;
+  }
 }

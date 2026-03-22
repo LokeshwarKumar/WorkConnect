@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Profile API</title>
+</head>
+<body>
+    <h1>Test Profile API</h1>
+    <button onclick="testBackendConnection()">Test Backend Connection</button>
+    <button onclick="testProfileUpdate()">Test Profile Update</button>
+    <div id="result"></div>
+
+    <script>
+        async function testBackendConnection() {
+            try {
+                const response = await fetch('http://localhost:8080/api/users/profile', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer test-token'
+                    }
+                });
+                
+                const result = document.getElementById('result');
+                if (response.ok) {
+                    result.innerHTML = `<p style="color: green;">Backend is accessible! Status: ${response.status}</p>`;
+                } else {
+                    result.innerHTML = `<p style="color: orange;">Backend responded with status: ${response.status} - ${response.statusText}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p style="color: red;">Network Error: ${error.message}</p>`;
+            }
+        }
+
+        async function testProfileUpdate() {
+            try {
+                const response = await fetch('http://localhost:8080/api/users/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer test-token'
+                    },
+                    body: JSON.stringify({
+                        name: 'Test User',
+                        contactDetails: 'test@example.com',
+                        address: 'Test Address'
+                    })
+                });
+                
+                const result = document.getElementById('result');
+                if (response.ok) {
+                    result.innerHTML = `<p style="color: green;">Profile update endpoint working! Status: ${response.status}</p>`;
+                } else {
+                    const errorText = await response.text();
+                    result.innerHTML = `<p style="color: orange;">Profile update responded with: ${response.status} - ${errorText}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p style="color: red;">Network Error on profile update: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

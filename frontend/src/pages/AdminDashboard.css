@@ -12,11 +12,80 @@
   font-size: 3rem;
 }
 
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.admin-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-dark-gray);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.admin-tabs button.active {
+  border-color: var(--color-gold-bright);
+  color: var(--color-gold-bright);
+  background: rgba(212, 175, 55, 0.08);
+}
+
 .admin-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 2rem;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
+}
+
+.admin-footnote {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.muted-count {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.admin-hint {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--color-dark-gray);
+  cursor: pointer;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+}
+
+.pill-btn.on {
+  border-color: #00ff7f;
+  color: #00ff7f;
+}
+
+.pill-btn.off {
+  border-color: #ff4d4d;
+  color: #ff4d4d;
 }
 
 .admin-stats .stat-card {
@@ -90,4 +159,35 @@
 .delete-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
+}
+
+.error-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border-radius: 8px;
+  background: rgba(255, 77, 77, 0.1);
+  border: 1px solid #ff4d4d;
+  color: #ff9999;
+  justify-content: center;
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(212, 175, 55, 0.1);
+  border-top-color: var(--color-gold-bright);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
