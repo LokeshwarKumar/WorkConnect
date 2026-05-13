@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
-import { Calendar, Clock, Star, X } from 'lucide-react';
+import { Calendar, Clock, MessageCircle, Star, X } from 'lucide-react';
+import RequestChat from '../components/RequestChat';
 import './Dashboard.css';
 
 const formatDate = (iso) => {
@@ -15,6 +16,7 @@ const ServiceHistory = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [chatRequest, setChatRequest] = useState(null);
   const [review, setReview] = useState({ rating: 5, comment: '' });
 
   useEffect(() => {
@@ -137,6 +139,16 @@ const ServiceHistory = () => {
                   {user.role === 'ROLE_USER' && item.status === 'COMPLETED' && item.reviewed && (
                     <span className="muted">Reviewed</span>
                   )}
+
+                  {(item.status === 'ACCEPTED' || item.status === 'COMPLETED') && (
+                    <button
+                      type="button"
+                      className="outline-btn small"
+                      onClick={() => setChatRequest(item)}
+                    >
+                      <MessageCircle size={14} /> Chat
+                    </button>
+                  )}
                 </div>
               </div>
             ))
@@ -146,6 +158,16 @@ const ServiceHistory = () => {
             </div>
           )}
         </div>
+      )}
+
+      {chatRequest && (
+        <RequestChat
+          requestId={chatRequest.id}
+          status={chatRequest.status}
+          counterpartyName={counterpartyName(chatRequest)}
+          userRole={user.role}
+          onClose={() => setChatRequest(null)}
+        />
       )}
 
       {selectedRequest && (

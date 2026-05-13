@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
-import { CheckCircle, XCircle, Calendar } from 'lucide-react';
+import { CheckCircle, XCircle, Calendar, MessageCircle } from 'lucide-react';
+import RequestChat from '../components/RequestChat';
 import './Dashboard.css';
 
 const formatDate = (iso) => {
@@ -13,6 +14,7 @@ const WorkerDashboard = () => {
   const [requests, setRequests] = useState([]);
   const [stats, setStats] = useState({ pending: 0, completed: 0, rating: 0 });
   const [loading, setLoading] = useState(true);
+  const [chatRequest, setChatRequest] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -155,6 +157,13 @@ const WorkerDashboard = () => {
                 </div>
                 <div className="activity-meta">
                   <span className="status-badge accepted">In progress</span>
+                  <button
+                    type="button"
+                    className="outline-btn small"
+                    onClick={() => setChatRequest(req)}
+                  >
+                    <MessageCircle size={14} /> Chat
+                  </button>
                 </div>
               </div>
             ))}
@@ -163,6 +172,16 @@ const WorkerDashboard = () => {
           )}
         </div>
       </section>
+
+      {chatRequest && (
+        <RequestChat
+          requestId={chatRequest.id}
+          status={chatRequest.status}
+          counterpartyName={chatRequest.user?.name || 'Customer'}
+          userRole="ROLE_WORKER"
+          onClose={() => setChatRequest(null)}
+        />
+      )}
     </div>
   );
 };
