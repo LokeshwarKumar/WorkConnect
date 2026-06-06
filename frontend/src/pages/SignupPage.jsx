@@ -34,9 +34,9 @@ const SignupPage = () => {
       const result = await signup(formData);
 
       if (result.success) {
-        navigate('/login', {
+        navigate('/verify-otp', {
           state: {
-            message: 'Account created successfully! Please sign in.'
+            email: formData.email
           }
         });
       } else {

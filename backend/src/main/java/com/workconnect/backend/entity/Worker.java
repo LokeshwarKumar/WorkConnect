@@ -54,6 +54,10 @@ public class Worker {
     @Builder.Default
     private Boolean approved = true;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean emailVerified = false;
+
     // Relationships
     @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ServiceRequest> serviceRequestsAsWorker;

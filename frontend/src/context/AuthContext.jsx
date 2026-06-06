@@ -54,6 +54,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const verifyOtp = async (email, otp) => {
+    try {
+      const response = await api.post('/auth/verify-otp', { email, otp });
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || 'OTP verification failed. Please try again.'
+      };
+    }
+  };
+
+  const resendOtp = async (email) => {
+    try {
+      const response = await api.post('/auth/resend-otp', { email });
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to resend OTP. Please try again.'
+      };
+    }
+  };
+
   const setOAuthSession = ({ token, user: userData }) => {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(userData));
@@ -77,7 +101,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, updateUser, setOAuthSession, loading }}>
+    <AuthContext.Provider value={{ user, login, signup, verifyOtp, resendOtp, logout, updateUser, setOAuthSession, loading }}>
       {children}
     </AuthContext.Provider>
   );

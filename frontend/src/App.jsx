@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 // Pages
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import OtpVerificationPage from './pages/OtpVerificationPage';
 import OAuthCallbackPage from './pages/OAuthCallbackPage';
 import UserDashboard from './pages/UserDashboard';
 import WorkerDashboard from './pages/WorkerDashboard';
@@ -38,6 +39,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/verify-otp" element={<OtpVerificationPage />} />
             
             <Route path="/" element={<HomeRedirect />} />
             

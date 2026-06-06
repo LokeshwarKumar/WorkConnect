@@ -45,6 +45,7 @@ public class OAuthAccountService {
                 .contactDetails("")
                 .address("")
                 .role(Role.USER)
+                .emailVerified(true)
                 .build();
         userRepository.save(user);
         return UserDetailsImpl.build(user);

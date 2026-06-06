@@ -37,6 +37,10 @@ public class User {
     @Builder.Default
     private Role role = Role.USER;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean emailVerified = false;
+
     // Relationships
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ServiceRequest> serviceRequestsAsUser;
