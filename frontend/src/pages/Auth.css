@@ -164,3 +164,50 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.oauth-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.oauth-divider::before,
+.oauth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-dark-gray);
+}
+
+.oauth-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.oauth-btn {
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--color-dark-gray);
+  background: var(--bg-primary);
+  color: var(--white);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.oauth-btn:hover {
+  border-color: var(--color-gold-muted);
+}
+
+.oauth-btn-google:hover {
+  border-color: #4285f4;
+}
+
+.oauth-btn-github:hover {
+  border-color: #8b949e;
+}

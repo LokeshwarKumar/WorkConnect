@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 // Pages
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import OAuthCallbackPage from './pages/OAuthCallbackPage';
 import UserDashboard from './pages/UserDashboard';
 import WorkerDashboard from './pages/WorkerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
@@ -16,14 +17,15 @@ import ServiceHistory from './pages/ServiceHistory';
 import WorkerRequests from './pages/WorkerRequests';
 
 const HomeRedirect = () => {
-  const { user } = useAuth();
-  if (!user) return <Navigate to="/login" />;
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (!user) return <Navigate to="/login" replace />;
   
   switch (user.role) {
-    case 'ROLE_USER': return <Navigate to="/user-dashboard" />;
-    case 'ROLE_WORKER': return <Navigate to="/worker-dashboard" />;
-    case 'ROLE_ADMIN': return <Navigate to="/admin" />;
-    default: return <Navigate to="/login" />;
+    case 'ROLE_USER': return <Navigate to="/user-dashboard" replace />;
+    case 'ROLE_WORKER': return <Navigate to="/worker-dashboard" replace />;
+    case 'ROLE_ADMIN': return <Navigate to="/admin" replace />;
+    default: return <Navigate to="/login" replace />;
   }
 };
 
@@ -62,6 +64,8 @@ function App() {
                 <WorkerRequests />
               </ProtectedRoute>
             } />
+
+            <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
 
             {/* Common Protected Routes */}
             <Route path="/history" element={

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { API_ORIGIN } from '../config/apiOrigin';
 import { LogIn, Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
 import './Auth.css';
 
@@ -13,6 +14,19 @@ const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get('error') === 'oauth_failed') {
+      setError(searchParams.get('message') || 'OAuth sign-in failed. Please try again.');
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
+  const getOAuthUrl = (provider) => {
+    const baseUrl = `${API_ORIGIN}/oauth2/authorization/${provider}`;
+    return provider === 'google' ? `${baseUrl}?prompt=select_account` : baseUrl;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,6 +98,27 @@ const LoginPage = () => {
           >
             {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : 'Sign In'}
           </button>
+
+          <div className="oauth-divider">
+            <span>or continue with</span>
+          </div>
+
+          <div className="oauth-buttons">
+            <a
+              href={getOAuthUrl('google')}
+              className="oauth-btn oauth-btn-google"
+              rel="noopener noreferrer"
+            >
+              Google
+            </a>
+            <a
+              href={getOAuthUrl('github')}
+              className="oauth-btn oauth-btn-github"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+          </div>
         </form>
 
         <div className="auth-footer">
