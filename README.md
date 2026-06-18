@@ -529,11 +529,3 @@ Certificate Location:
 - Secure WebSocket Messaging
 
 ---
-
-## Author
-
-**Lokeshwar Kumar Thota**
-
-B.Tech CSE (AI & ML)
-
-Full Stack Java Developer | Spring Boot Developer | DevOps Enthusiast
